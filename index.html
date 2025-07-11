@@ -208,7 +208,7 @@
         overlay.addEventListener('click', closeSidebar);
 
         onValue(ref(database), snapshot => {
-            allData = snapshot.val() || {};
+            allData = snapshot.val() || { batches: {}, settings: {} };
             const currentPageState = history.state || { page: initialHash };
             navigateTo(currentPageState.page, currentPageState, false); 
             updateSettings();
@@ -218,7 +218,14 @@
         const getObjectCount = obj => obj ? Object.keys(obj).length : 0;
         const subjectIcons = { default: 'fa-book', Physics: 'fa-atom', Chemistry: 'fa-flask', Notices: 'fa-bullhorn', Mathematics: 'fa-calculator', Biology: 'fa-dna', English: 'fa-spell-check' };
 
-        const updateSettings = () => { /* Logic to update links and logos */ };
+        const updateSettings = () => {
+            const settings = allData.settings || {};
+            const logoUrl = settings.logoLink || 'https://i.imgur.com/v8L6kK8.png'; // Default logo
+            document.querySelectorAll('.logo').forEach(el => el.src = logoUrl);
+            document.querySelectorAll('#header-logo-link, #sidebar-logo-link').forEach(el => el.href = settings.logoLink || '#');
+            document.getElementById('telegram-link').href = settings.telegramLink || '#';
+            document.getElementById('contact-link').href = settings.contactLink || '#';
+        };
         
         const renderHomePage = () => {
             const batchListDiv = document.getElementById('batch-list');
