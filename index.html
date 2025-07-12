@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CLASS11UP</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary-bg: #10141f;
@@ -24,9 +26,9 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif; /* Default font */
             background-color: var(--primary-bg);
-            background-image: radial-gradient(circle at top, rgba(27, 33, 44, 0.8), transparent 50%);
+            background-image: radial-gradient(circle at top, rgba(27, 33, 44, 0.8), transparent 60%);
             color: var(--text-primary);
             overflow-x: hidden;
         }
@@ -47,7 +49,7 @@
             filter: blur(20px); animation: pulse 2s infinite ease-in-out;
         }
         @keyframes pulse { 0%, 100% { transform: scale(0.8); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 1; } }
-        #splash-screen h1 { font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 30px; letter-spacing: 2px; }
+        #splash-screen h1 { font-family: 'Exo 2', sans-serif; font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 30px; letter-spacing: 2px; }
         .loading-bar-container { width: 80%; max-width: 300px; height: 4px; background-color: var(--secondary-bg); border-radius: 2px; overflow: hidden; }
         .loading-bar { width: 0%; height: 100%; border-radius: 2px;
             background: linear-gradient(90deg, var(--button-active), var(--glow-3));
@@ -63,53 +65,72 @@
 
         /* --- GENERAL & PREMIUM STYLES --- */
         .page { display: none; min-height: 100vh; }
-        .page.active { display: block; animation: page-enter 0.5s ease-out; }
-        @keyframes page-enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .page.active { display: block; animation: page-enter 0.6s cubic-bezier(0.25, 1, 0.5, 1); }
+        @keyframes page-enter { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .main-container { padding: 20px; }
         .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; }
-        .page-header .header-left, .page-header .header-right { flex-basis: 40px; }
         .page-header .icon-btn { font-size: 22px; cursor: pointer; color: var(--text-primary); }
         .page-header .logo { height: 40px; width: 40px; border-radius: 50%; object-fit: cover; }
-        .glowing-title { flex-grow: 1; text-align: center; font-size: 22px; font-weight: 700; color: transparent; text-transform: uppercase; background: linear-gradient(90deg, var(--glow-1), var(--glow-2), var(--glow-3), var(--glow-1)); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 8s linear infinite; text-shadow: 0 0 3px rgba(255,255,255,0.4), 0 0 8px var(--glow-2); }
+        .glowing-title { font-family: 'Exo 2', sans-serif; flex-grow: 1; text-align: center; font-size: 22px; font-weight: 700; color: transparent; text-transform: uppercase; background: linear-gradient(90deg, var(--glow-1), var(--glow-2), var(--glow-3), var(--glow-1)); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; animation: gradient-flow 8s linear infinite; text-shadow: 0 0 3px rgba(255,255,255,0.4), 0 0 8px var(--glow-2); }
         @keyframes gradient-flow { to { background-position: -200% center; } }
         .inner-page-header { display: flex; align-items: center; margin-bottom: 30px; }
         .inner-page-header .back-arrow { font-size: 22px; cursor: pointer; color: var(--text-primary); margin-right: 20px;}
-        .inner-page-header .title { font-size: 24px; font-weight: 600; }
+        .inner-page-header .title { font-family: 'Exo 2', sans-serif; font-size: 24px; font-weight: 600; }
         .search-container { position: relative; margin-bottom: 20px; }
         .search-input { width: 100%; background-color: var(--secondary-bg); border: 1px solid var(--card-bg); border-radius: 10px; padding: 15px 20px; color: var(--text-primary); font-size: 16px; transition: border-color 0.3s, box-shadow 0.3s; }
-        .search-input:focus { border-color: var(--button-active); box-shadow: 0 0 10px var(--glow-color); outline: none; }
+        .search-input:focus { border-color: var(--button-active); box-shadow: 0 0 15px var(--glow-color); outline: none; }
         .tabs { display: flex; background-color: var(--secondary-bg); border-radius: 10px; padding: 5px; margin-bottom: 20px; }
-        .tab-btn { flex: 1; padding: 12px; background: none; border: none; color: var(--text-secondary); font-size: 16px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
-        .tab-btn.active, .tab-btn:hover { background-color: var(--button-active); color: white; }
-        .batch-card, .subject-card, .chapter-card { display: block; text-decoration: none; color: var(--text-primary); background-color: var(--card-bg); border-radius: 12px; margin-bottom: 20px; overflow: hidden; border: 1px solid transparent; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; }
-        .batch-card:hover, .subject-card:hover, .chapter-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 0 20px var(--glow-color); border-color: var(--button-active); }
+        .tab-btn { font-family: 'Exo 2', sans-serif; flex: 1; padding: 12px; background: none; border: none; color: var(--text-secondary); font-size: 16px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: background-color 0.3s, color 0.3s, transform 0.2s; }
+        .tab-btn.active, .tab-btn:hover { background-color: var(--button-active); color: white; transform: translateY(-2px); }
+        
+        /* NEW: Card animation */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .batch-card, .subject-card, .chapter-card { 
+            display: block; text-decoration: none; color: var(--text-primary); 
+            background-color: var(--card-bg); border-radius: 12px; margin-bottom: 20px; 
+            overflow: hidden; border: 1px solid transparent; 
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        .batch-card:hover, .subject-card:hover, .chapter-card:hover { 
+            transform: translateY(-8px) scale(1.02); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 25px var(--glow-color); 
+            border-color: var(--button-active); 
+        }
+
         .batch-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
-        .batch-card .card-content { display: flex; align-items: center; justify-content: space-between; padding: 15px; }
+        .batch-card .card-content { display: flex; align-items: center; justify-content: space-between; padding: 15px; font-family: 'Exo 2', sans-serif; }
         .fav-icon { font-size: 20px; cursor: pointer; z-index: 10; color: var(--text-secondary); transition: color 0.3s, transform 0.3s; }
         .fav-icon:hover { transform: scale(1.2); }
         .fav-icon.is-favourite { color: var(--fav-red); animation: heart-beat 0.5s ease; }
         @keyframes heart-beat { 0% { transform: scale(1); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
-        .subject-card, .chapter-card { padding: 20px; }
+        .subject-card, .chapter-card { padding: 20px; font-family: 'Exo 2', sans-serif; }
         .chapter-card { border-left: 4px solid var(--button-active); }
         .sub-chapter-card { margin-left: 20px; border-left-color: var(--glow-3); }
         .chapter-card h5 i { margin-right: 10px; color: var(--glow-3); }
         .content-tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-        .content-tab-btn { padding: 8px 15px; background-color: var(--secondary-bg); border: none; color: var(--text-secondary); border-radius: 20px; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
+        .content-tab-btn { font-family: 'Exo 2', sans-serif; padding: 8px 15px; background-color: var(--secondary-bg); border: none; color: var(--text-secondary); border-radius: 20px; cursor: pointer; transition: background-color 0.3s, color 0.3s; }
         .content-tab-btn.active, .content-tab-btn:hover { background-color: var(--button-active); color: white; }
         .content-panel { display: none; }
-        .content-panel.active { display: block; }
-        .content-list-item a { text-decoration: none; color: var(--text-secondary); display: flex; align-items:center; gap: 15px; padding: 12px; background-color: var(--secondary-bg); border-radius: 8px; margin-bottom: 8px; transition: background-color 0.3s, color 0.3s, transform 0.3s; }
-        .content-list-item a:hover { background-color: var(--card-bg); color: white; transform: translateX(5px); }
-        .sidebar { position: fixed; top: 0; left: -280px; width: 270px; height: 100%; background-color: var(--secondary-bg); transition: left 0.3s; z-index: 200; display: flex; flex-direction: column; padding: 20px 0; }
+        .content-panel.active { display: block; animation: page-enter 0.5s ease-out; }
+        .content-list-item a { text-decoration: none; color: var(--text-secondary); display: flex; align-items:center; gap: 15px; padding: 15px; background-color: var(--secondary-bg); border-radius: 8px; margin-bottom: 8px; transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s; }
+        .content-list-item a:hover { background-color: var(--card-bg); color: white; transform: translateX(5px); box-shadow: 0 0 10px var(--glow-color); }
+        .content-list-item a i { width: 20px; text-align: center; color: var(--button-active); font-size: 1.1em; transition: color 0.3s, transform 0.3s; }
+        .content-list-item a:hover i { color: var(--glow-3); transform: scale(1.1); }
+        
+        .sidebar { position: fixed; top: 0; left: -280px; width: 270px; height: 100%; background-color: var(--secondary-bg); transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 200; display: flex; flex-direction: column; padding: 20px 0; border-right: 1px solid var(--card-bg); box-shadow: 5px 0 25px rgba(0,0,0,0.3); }
         .sidebar.open { left: 0; }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 199; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 199; }
         .overlay.show { display: block; }
         .sidebar-header { text-align: center; padding: 0 20px; margin-bottom: 20px; }
         .sidebar-header .logo { height: 60px; width: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; }
-        .sidebar-header .title { font-size: 24px; font-weight: 600; text-transform: uppercase; }
+        .sidebar-header .title { font-family: 'Exo 2', sans-serif; font-size: 24px; font-weight: 600; text-transform: uppercase; }
         .sidebar-header .close-btn { position: absolute; top: 15px; right: 15px; font-size: 24px; cursor: pointer; }
-        .sidebar-links li a { color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; padding: 15px 20px; font-size: 16px; }
+        .sidebar-links li a { font-family: 'Exo 2', sans-serif; color: var(--text-secondary); text-decoration: none; display: flex; align-items: center; padding: 15px 20px; font-size: 16px; transition: background-color 0.3s, color 0.3s; }
+        .sidebar-links li a:hover { background-color: var(--button-active); color: white; }
+        .sidebar-links li a i { margin-right: 15px; width: 20px; }
         .sidebar-footer { margin-top: auto; text-align: center; padding: 20px; font-size: 14px; color: #888; }
+        
         @media (min-width: 600px) { #batch-list, #subject-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; } }
         @media (min-width: 900px) { #batch-list, #subject-list { grid-template-columns: repeat(3, 1fr); } }
     </style>
@@ -180,7 +201,7 @@
            <div class="content-tabs" id="content-tabs-container"></div>
            <div id="content-panels-container"></div>
        </div>
-   </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
@@ -354,14 +375,21 @@
                     const tabButton = document.createElement('button');
                     tabButton.className = 'content-tab-btn' + (isFirstTab ? ' active' : '');
                     tabButton.dataset.panelId = panelId;
-                    tabButton.textContent = tabNames[type];
+                    tabButton.textContent = `${tabNames[type]} (${contentByType[type].length})`;
                     
                     const panelDiv = document.createElement('div');
                     panelDiv.className = 'content-panel' + (isFirstTab ? ' active' : '');
                     panelDiv.id = panelId;
-
+                    
+                    // NEW: Conditional icons for content items
                     contentByType[type].forEach(item => {
-                        panelDiv.innerHTML += `<div class="content-list-item"><a href="${item.url}" target="_blank" rel="noopener noreferrer"><i class="fas fa-play-circle"></i> ${item.title}</a></div>`;
+                        let iconClass = 'fa-play-circle'; // Default
+                        if (item.type === 'lecture') {
+                            iconClass = 'fa-video'; // Video icon for lectures
+                        } else if (item.type === 'note' || item.type === 'dpp') {
+                            iconClass = 'fa-file-pdf'; // PDF icon for notes and DPPs
+                        }
+                        panelDiv.innerHTML += `<div class="content-list-item"><a href="${item.url}" target="_blank" rel="noopener noreferrer"><i class="fas ${iconClass}"></i> ${item.title}</a></div>`;
                     });
                     
                     tabsContainer.appendChild(tabButton);
@@ -423,5 +451,37 @@
              document.body.innerHTML = '<div style="text-align: center; padding-top: 50px;"><h2>Could not connect to database.</h2><p>Please check your internet connection and try again.</p></div>';
         });
     </script>
-</body>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyC1m25mHpA59xBQmF34BfA1K_vY2pUSrLI",
+          authDomain: "fahad-portfolio-81c65.firebaseapp.com",
+          databaseURL: "https://fahad-portfolio-81c65-default-rtdb.firebaseio.com",
+          projectId: "fahad-portfolio-81c65",
+          storageBucket: "fahad-portfolio-81c65.firebasestorage.app",
+          messagingSenderId: "510625882446",
+          appId: "1:510625882446:web:b23f76808b3dd0e79a3e1f"
+        };
+
+        const visitorApp = initializeApp(firebaseConfig, "visitorCounterApp"); 
+        const database = getDatabase(visitorApp);
+
+        function incrementVisitCount() {
+            const visitsRef = ref(database, 'analytics/visits');
+            runTransaction(visitsRef, (currentValue) => {
+                return (currentValue || 0) + 1;
+            });
+            console.log("Visitor count incremented. Welcome!");
+        }
+
+        // Use localStorage for one-time count per user (persistent)
+        if (!localStorage.getItem('visitCounted')) {
+            incrementVisitCount();
+            localStorage.setItem('visitCounted', 'true');
+        }
+    </script>
+    </body>
 </html>
