@@ -13,48 +13,70 @@
             --primary-bg: #10141f;
             --secondary-bg: #1b212c;
             --card-bg: #283040;
-            --button-active: #6c5ce7;
-            --button-hover: #7b6ff9;
+            --button-active: #00aeff; /* Changed button color for better visibility */
+            --button-hover: #33bbff;
             --text-primary: #ffffff;
             --text-secondary: #a0a8b9;
-            --glow-color: rgba(108, 92, 231, 0.5);
+            --glow-color: rgba(0, 174, 255, 0.5);
             --glow-1: #00aaff;
             --glow-2: #8A2BE2;
             --glow-3: #00ffc3;
             --fav-red: #e74c3c;
+            --online-green: #2ecc71;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html { scroll-behavior: smooth; }
         body {
-            font-family: 'Poppins', sans-serif; /* Default font */
+            font-family: 'Poppins', sans-serif;
             background-color: var(--primary-bg);
             background-image: radial-gradient(circle at top, rgba(27, 33, 44, 0.8), transparent 60%);
             color: var(--text-primary);
             overflow-x: hidden;
+            padding-top: 0; /* Add padding top to prevent content from hiding behind timer */
         }
 
-        /* --- SCI-FI SPLASH SCREEN --- */
-        #splash-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: var(--primary-bg);
-            z-index: 2000; display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            transition: opacity 0.5s ease-out, visibility 0.5s;
+        /* --- NEW: TIMER BAR STYLES --- */
+        #timer-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, var(--glow-1), var(--glow-2));
+            color: white;
+            text-align: center;
+            padding: 8px 0;
+            font-family: 'Exo 2', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            z-index: 1999; /* High z-index to stay on top */
+            display: none; /* Hidden by default */
+            box-shadow: 0 4px 15px rgba(0, 174, 255, 0.4);
         }
+        #timer-bar.visible {
+            display: block;
+            animation: slideDown 0.5s ease-out;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Adjust main container padding when timer is visible */
+         body.timer-active .main-container {
+            padding-top: 50px; /* Adjust based on timer bar height */
+        }
+
+
+        /* --- SCI-FI SPLASH SCREEN --- */
+        #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--primary-bg); z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: opacity 0.5s ease-out, visibility 0.5s; }
         #splash-screen.hidden { opacity: 0; visibility: hidden; }
         .sci-fi-icon { width: 80px; height: 80px; margin-bottom: 20px; position: relative; }
         .sci-fi-icon svg { width: 100%; height: 100%; z-index: 2; position: relative; }
-        .sci-fi-icon .glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, var(--button-active) 10%, transparent 70%);
-            filter: blur(20px); animation: pulse 2s infinite ease-in-out;
-        }
+        .sci-fi-icon .glow { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, var(--button-active) 10%, transparent 70%); filter: blur(20px); animation: pulse 2s infinite ease-in-out; }
         @keyframes pulse { 0%, 100% { transform: scale(0.8); opacity: 0.7; } 50% { transform: scale(1.2); opacity: 1; } }
         #splash-screen h1 { font-family: 'Exo 2', sans-serif; font-size: 28px; font-weight: 700; color: var(--text-primary); margin-bottom: 30px; letter-spacing: 2px; }
         .loading-bar-container { width: 80%; max-width: 300px; height: 4px; background-color: var(--secondary-bg); border-radius: 2px; overflow: hidden; }
-        .loading-bar { width: 0%; height: 100%; border-radius: 2px;
-            background: linear-gradient(90deg, var(--button-active), var(--glow-3));
-            animation: fill-bar 2.5s ease-out;
-        }
+        .loading-bar { width: 0%; height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--button-active), var(--glow-3)); animation: fill-bar 2.5s ease-out forwards; }
         @keyframes fill-bar { from { width: 0%; } to { width: 100%; } }
 
         /* --- LOADER --- */
@@ -83,21 +105,9 @@
         .tab-btn { font-family: 'Exo 2', sans-serif; flex: 1; padding: 12px; background: none; border: none; color: var(--text-secondary); font-size: 16px; font-weight: 500; border-radius: 8px; cursor: pointer; transition: background-color 0.3s, color 0.3s, transform 0.2s; }
         .tab-btn.active, .tab-btn:hover { background-color: var(--button-active); color: white; transform: translateY(-2px); }
         
-        /* NEW: Card animation */
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .batch-card, .subject-card, .chapter-card { 
-            display: block; text-decoration: none; color: var(--text-primary); 
-            background-color: var(--card-bg); border-radius: 12px; margin-bottom: 20px; 
-            overflow: hidden; border: 1px solid transparent; 
-            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-            animation: fadeInUp 0.5s ease-out forwards;
-        }
-        .batch-card:hover, .subject-card:hover, .chapter-card:hover { 
-            transform: translateY(-8px) scale(1.02); 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 25px var(--glow-color); 
-            border-color: var(--button-active); 
-        }
-
+        .batch-card, .subject-card, .chapter-card { display: block; text-decoration: none; color: var(--text-primary); background-color: var(--card-bg); border-radius: 12px; margin-bottom: 20px; overflow: hidden; border: 1px solid transparent; transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; animation: fadeInUp 0.5s ease-out forwards; }
+        .batch-card:hover, .subject-card:hover, .chapter-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 10px 30px rgba(0,0,0,0.3), 0 0 25px var(--glow-color); border-color: var(--button-active); }
         .batch-card img { width: 100%; height: 150px; object-fit: cover; display: block; }
         .batch-card .card-content { display: flex; align-items: center; justify-content: space-between; padding: 15px; font-family: 'Exo 2', sans-serif; }
         .fav-icon { font-size: 20px; cursor: pointer; z-index: 10; color: var(--text-secondary); transition: color 0.3s, transform 0.3s; }
@@ -118,9 +128,9 @@
         .content-list-item a i { width: 20px; text-align: center; color: var(--button-active); font-size: 1.1em; transition: color 0.3s, transform 0.3s; }
         .content-list-item a:hover i { color: var(--glow-3); transform: scale(1.1); }
         
-        .sidebar { position: fixed; top: 0; left: -280px; width: 270px; height: 100%; background-color: var(--secondary-bg); transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 200; display: flex; flex-direction: column; padding: 20px 0; border-right: 1px solid var(--card-bg); box-shadow: 5px 0 25px rgba(0,0,0,0.3); }
+        .sidebar { position: fixed; top: 0; left: -280px; width: 270px; height: 100%; background-color: var(--secondary-bg); transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1); z-index: 1500; display: flex; flex-direction: column; padding: 20px 0; border-right: 1px solid var(--card-bg); box-shadow: 5px 0 25px rgba(0,0,0,0.3); }
         .sidebar.open { left: 0; }
-        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 199; }
+        .overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); z-index: 1499; }
         .overlay.show { display: block; }
         .sidebar-header { text-align: center; padding: 0 20px; margin-bottom: 20px; }
         .sidebar-header .logo { height: 60px; width: 60px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; }
@@ -131,11 +141,40 @@
         .sidebar-links li a i { margin-right: 15px; width: 20px; }
         .sidebar-footer { margin-top: auto; text-align: center; padding: 20px; font-size: 14px; color: #888; }
         
+        .active-user-container { color: var(--text-secondary); font-size: 14px; margin-bottom: 10px; }
+        .active-user-container i { color: var(--online-green); animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0%, 100% { transform: scale(1); box-shadow: 0 0 3px var(--online-green); } 50% { transform: scale(1.1); box-shadow: 0 0 8px var(--online-green); } }
+
+        /* --- NEW: ACCESS VERIFICATION MODAL STYLES --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(16, 20, 31, 0.8); backdrop-filter: blur(8px); z-index: 1600; display: flex; align-items: center; justify-content: center; transition: opacity 0.3s, visibility 0.3s; opacity: 0; visibility: hidden; }
+        .modal-overlay:not(.hidden) { opacity: 1; visibility: visible; }
+        .modal-content { font-family: 'Poppins', sans-serif; background: var(--secondary-bg); border-radius: 15px; padding: 30px; width: 90%; max-width: 400px; text-align: center; border: 1px solid var(--card-bg); box-shadow: 0 10px 40px rgba(0,0,0,0.5); position: relative; animation: modal-enter 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        @keyframes modal-enter { from { opacity: 0; transform: scale(0.9) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-content .close-modal-btn { position: absolute; top: 10px; right: 15px; font-size: 28px; color: var(--text-secondary); cursor: pointer; transition: color 0.3s, transform 0.3s; }
+        .modal-content .close-modal-btn:hover { color: var(--text-primary); transform: rotate(90deg); }
+        .modal-icon { width: 60px; height: 60px; margin: 0 auto 15px; background-color: var(--button-active); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 0 20px var(--glow-color); }
+        .modal-content h2 { font-family: 'Exo 2', sans-serif; font-size: 26px; margin-bottom: 10px; color: var(--text-primary); }
+        .modal-content p { color: var(--text-secondary); margin-bottom: 25px; line-height: 1.6; }
+        #generate-key-btn { width: 100%; padding: 15px; font-size: 18px; font-weight: 600; color: white; background: var(--button-active); border: none; border-radius: 10px; cursor: pointer; transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s; box-shadow: 0 5px 20px var(--glow-color); }
+        #generate-key-btn:hover { background-color: var(--button-hover); transform: translateY(-3px); }
+        .modal-content .tutorial-link { margin-top: 20px; color: var(--text-primary); font-weight: 500; cursor: pointer; }
+        .modal-content .tutorial-link i { margin-right: 8px; color: var(--button-active); }
+        .modal-content .tutorial-steps { text-align: left; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--card-bg); }
+        .modal-content .tutorial-steps p { font-size: 14px; margin-bottom: 12px; display: flex; align-items: center; }
+        .modal-content .tutorial-steps i { margin-right: 12px; width: 20px; text-align: center; color: var(--glow-3); }
+        .modal-content .tutorial-steps i.fa-lightbulb { color: #f1c40f; }
+        .modal-content .tutorial-steps i.fa-bullseye { color: #e74c3c; }
+        .modal-content .tutorial-steps i.fa-exclamation-triangle { color: #f39c12; }
+        .success-message { font-size: 20px; font-weight: 500; color: var(--text-primary); }
+        #success-state.hidden, #initial-state.hidden { display: none; }
+        
         @media (min-width: 600px) { #batch-list, #subject-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; } }
         @media (min-width: 900px) { #batch-list, #subject-list { grid-template-columns: repeat(3, 1fr); } }
     </style>
 </head>
 <body>
+    <div id="timer-bar" class="hidden"></div>
+
     <div id="splash-screen">
         <div class="sci-fi-icon">
             <div class="glow"></div>
@@ -161,10 +200,38 @@
             <li><a id="telegram-link" href="#" target="_blank"><i class="fa-brands fa-telegram"></i> Join Telegram</a></li>
             <li><a id="contact-link" href="#" target="_blank"><i class="fa-solid fa-headset"></i> Help & Support</a></li>
         </ul>
-        <div class="sidebar-footer">Made with ❤️ in India by CLASS11UP</div>
+        <div class="sidebar-footer">
+            <div class="active-user-container">
+                <i class="fa-solid fa-circle"></i> <span id="active-users-count">0</span> Active Now
+            </div>
+            Made with ❤️ in India by CLASS11UP
+        </div>
     </aside>
     <div class="overlay" id="overlay"></div>
     
+    <div id="access-verification-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div id="initial-state">
+                <span class="close-modal-btn">&times;</span>
+                <div class="modal-icon"><i class="fas fa-lock"></i></div>
+                <h2>Access Verification</h2>
+                <p>Please complete a quick step to unlock this batch.</p>
+                <button id="generate-key-btn">Generate Access Key</button>
+                <div class="tutorial-steps">
+                    <p><i class="fas fa-lightbulb"></i> Watch the tutorial before generating your key.</p>
+                    <p><i class="fas fa-bullseye"></i> Follow the steps exactly as shown in the video.</p>
+                    <p><i class="fas fa-exclamation-triangle"></i> After completing the step, this page will refresh automatically.</p>
+                </div>
+            </div>
+            <div id="success-state" class="hidden">
+                 <div class="modal-icon" style="background-color: var(--online-green);"><i class="fas fa-check"></i></div>
+                 <h2>Key Generated!</h2>
+                 <p class="success-message">koi shortenlink nhi hai yrr tu Aram se padaii kr 🙏 (padaii rukna nhi chahiye mitrrrrr 💪)</p>
+                 <p>Redirecting you to the batch...</p>
+            </div>
+        </div>
+    </div>
+
     <div id="home-page" class="page">
         <div class="main-container">
             <header class="page-header">
@@ -200,7 +267,7 @@
            <header class="inner-page-header"><a class="back-arrow">&larr;</a><h2 class="title" id="content-page-title"></h2></header>
            <div class="content-tabs" id="content-tabs-container"></div>
            <div id="content-panels-container"></div>
-       </div>
+        </div>
     </div>
 
     <script type="module">
@@ -222,6 +289,39 @@
         let allData = {};
         const loader = document.getElementById('loader');
         const allPages = document.querySelectorAll('.page');
+        const accessModal = document.getElementById('access-verification-modal');
+        let currentBatchIdToUnlock = null;
+        let timerInterval = null; // Variable to hold the timer interval
+
+        // --- COOKIE HELPER FUNCTIONS ---
+        function setCookie(name, value, hours) {
+            let expires = "";
+            if (hours) {
+                const date = new Date();
+                date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
+                expires = "; expires=" + date.toUTCString();
+            }
+            document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i=0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        
+        function deleteCookie(name) {
+            document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
+        setTimeout(() => {
+            document.getElementById('splash-screen').classList.add('hidden');
+        }, 2500);
 
         function showPage(pageId) {
             allPages.forEach(p => p.classList.remove('active'));
@@ -256,6 +356,58 @@
             } finally {
                 setTimeout(() => loader.classList.add('hidden'), 200);
             }
+        }
+        
+        // --- NEW/MODIFIED TIMER FUNCTIONS ---
+        function updateTimerDisplay(batchId) {
+            const timerBar = document.getElementById('timer-bar');
+            const endTime = getCookie(`unlock_expires_${batchId}`);
+            
+            if (!endTime) {
+                timerBar.classList.remove('visible');
+                document.body.classList.remove('timer-active');
+                if (timerInterval) clearInterval(timerInterval);
+                return;
+            }
+
+            timerBar.classList.add('visible');
+            document.body.classList.add('timer-active');
+            
+            if (timerInterval) clearInterval(timerInterval); // Clear any existing timer
+
+            timerInterval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = endTime - now;
+
+                if (distance < 0) {
+                    clearInterval(timerInterval);
+                    timerBar.classList.remove('visible');
+                    document.body.classList.remove('timer-active');
+                    deleteCookie(`unlock_expires_${batchId}`);
+                    // Optionally, re-render the current page to reflect locked status
+                    const state = history.state || { page: 'home-page' };
+                    renderPage(state.page, state);
+                    return;
+                }
+
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                timerBar.textContent = `Time Left: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function startOrResumeTimer() {
+             if (!allData.batches) return;
+             const batchIds = Object.keys(allData.batches);
+             for(const batchId of batchIds) {
+                 const expiryTimestamp = getCookie(`unlock_expires_${batchId}`);
+                 if (expiryTimestamp && new Date().getTime() < parseInt(expiryTimestamp)) {
+                     updateTimerDisplay(batchId);
+                     break; // Assuming only one timer can be active at a time
+                 }
+             }
         }
 
         function renderHomePage() {
@@ -295,7 +447,17 @@
                         localStorage.setItem('favourites', JSON.stringify(favs));
                         renderHomePage();
                     } else {
-                        navigate('subjects-page', { batchId });
+                        const isFreeAccess = allData.settings?.freeAccess === 'ON';
+                        // MODIFIED: Check for expiry time
+                        const expiryTimestamp = getCookie(`unlock_expires_${batchId}`);
+                        const isUnlocked = expiryTimestamp && new Date().getTime() < parseInt(expiryTimestamp);
+
+                        if (isFreeAccess || isUnlocked) {
+                            navigate('subjects-page', { batchId });
+                        } else {
+                            currentBatchIdToUnlock = batchId;
+                            showAccessModal();
+                        }
                     }
                 });
                 batchListDiv.appendChild(card);
@@ -381,13 +543,12 @@
                     panelDiv.className = 'content-panel' + (isFirstTab ? ' active' : '');
                     panelDiv.id = panelId;
                     
-                    // NEW: Conditional icons for content items
                     contentByType[type].forEach(item => {
                         let iconClass = 'fa-play-circle'; // Default
                         if (item.type === 'lecture') {
-                            iconClass = 'fa-video'; // Video icon for lectures
+                            iconClass = 'fa-video';
                         } else if (item.type === 'note' || item.type === 'dpp') {
-                            iconClass = 'fa-file-pdf'; // PDF icon for notes and DPPs
+                            iconClass = 'fa-file-pdf';
                         }
                         panelDiv.innerHTML += `<div class="content-list-item"><a href="${item.url}" target="_blank" rel="noopener noreferrer"><i class="fas ${iconClass}"></i> ${item.title}</a></div>`;
                     });
@@ -408,6 +569,44 @@
             };
         }
 
+        // --- NEW: MODAL HANDLING FUNCTIONS ---
+        function showAccessModal() {
+            accessModal.classList.remove('hidden');
+            // Reset to initial state every time it's shown
+            accessModal.querySelector('#initial-state').classList.remove('hidden');
+            accessModal.querySelector('#success-state').classList.add('hidden');
+        }
+
+        function hideAccessModal() {
+            accessModal.classList.add('hidden');
+        }
+
+        document.getElementById('generate-key-btn').addEventListener('click', () => {
+            if (currentBatchIdToUnlock) {
+                const unlockDuration = allData.settings?.unlockDuration || 24; // Duration in hours
+                const expirationTime = new Date().getTime() + (unlockDuration * 60 * 60 * 1000);
+                
+                // Set cookie with expiration timestamp
+                setCookie(`unlock_expires_${currentBatchIdToUnlock}`, expirationTime, unlockDuration);
+                
+                // Start the timer immediately
+                updateTimerDisplay(currentBatchIdToUnlock);
+
+                // Show success state in the modal
+                accessModal.querySelector('#initial-state').classList.add('hidden');
+                accessModal.querySelector('#success-state').classList.remove('hidden');
+
+                // Navigate to the batch page after a short delay
+                setTimeout(() => {
+                    hideAccessModal();
+                    navigate('subjects-page', { batchId: currentBatchIdToUnlock });
+                }, 2500); // 2.5 second delay to show the success message
+            }
+        });
+        
+        accessModal.querySelector('.close-modal-btn').addEventListener('click', hideAccessModal);
+
+        // --- EXISTING EVENT LISTENERS ---
         document.querySelectorAll('.back-arrow').forEach(arrow => arrow.onclick = () => history.back());
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -428,7 +627,14 @@
             try {
                 allData = snapshot.val() || {};
                 const state = history.state || { page: window.location.hash.slice(1) || 'home-page' };
+                if (!history.state) {
+                   history.replaceState({ page: 'home-page' }, '', '#home-page');
+                }
                 renderPage(state.page, state);
+                
+                // NEW: Check for and resume any active timers on data load
+                startOrResumeTimer();
+                
                 const settings = allData.settings || {};
                 const logoUrl = settings.logoLink || '';
                 document.querySelectorAll('.logo').forEach(el => el.src = logoUrl);
@@ -436,52 +642,62 @@
                 document.getElementById('telegram-link').href = settings.telegramLink || '#';
                 document.getElementById('contact-link').href = settings.contactLink || '#';
                 
-                // Data aane ke baad splash screen hide karo
-                document.getElementById('splash-screen').classList.add('hidden');
-
             } catch (error) {
                 console.error("Firebase data handling error:", error);
                 renderPage('home-page', {});
-                document.getElementById('splash-screen').classList.add('hidden');
             }
         }, (error) => {
             console.error("Firebase connection error:", error);
-             document.getElementById('splash-screen').classList.add('hidden');
-             loader.classList.add('hidden');
-             document.body.innerHTML = '<div style="text-align: center; padding-top: 50px;"><h2>Could not connect to database.</h2><p>Please check your internet connection and try again.</p></div>';
+            loader.classList.add('hidden');
+            document.body.innerHTML = '<div style="text-align: center; padding-top: 50px;"><h2>Could not connect to database.</h2><p>Please check your internet connection and try again.</p></div>';
+        });
+
+        const presenceDisplayRef = ref(database, 'presence');
+        onValue(presenceDisplayRef, (snapshot) => {
+            const count = snapshot.size;
+            const countElement = document.getElementById('active-users-count');
+            if (countElement) {
+                countElement.textContent = count;
+            }
         });
     </script>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
-        import { getDatabase, ref, runTransaction } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import { getDatabase, ref, runTransaction, onValue, onDisconnect, push, set } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
 
         const firebaseConfig = {
-          apiKey: "AIzaSyC1m25mHpA59xBQmF34BfA1K_vY2pUSrLI",
-          authDomain: "fahad-portfolio-81c65.firebaseapp.com",
-          databaseURL: "https://fahad-portfolio-81c65-default-rtdb.firebaseio.com",
-          projectId: "fahad-portfolio-81c65",
-          storageBucket: "fahad-portfolio-81c65.firebasestorage.app",
-          messagingSenderId: "510625882446",
-          appId: "1:510625882446:web:b23f76808b3dd0e79a3e1f"
+            apiKey: "AIzaSyC1m25mHpA59xBQmF34BfA1K_vY2pUSrLI",
+            authDomain: "fahad-portfolio-81c65.firebaseapp.com",
+            databaseURL: "https://fahad-portfolio-81c65-default-rtdb.firebaseio.com",
+            projectId: "fahad-portfolio-81c65",
+            storageBucket: "fahad-portfolio-81c65.firebasestorage.app",
+            messagingSenderId: "510625882446",
+            appId: "1:510625882446:web:b23f76808b3dd0e79a3e1f"
         };
 
-        const visitorApp = initializeApp(firebaseConfig, "visitorCounterApp"); 
-        const database = getDatabase(visitorApp);
+        const analyticsApp = initializeApp(firebaseConfig, "analyticsAndPresenceApp"); 
+        const database = getDatabase(analyticsApp);
 
         function incrementVisitCount() {
             const visitsRef = ref(database, 'analytics/visits');
-            runTransaction(visitsRef, (currentValue) => {
-                return (currentValue || 0) + 1;
-            });
-            console.log("Visitor count incremented. Welcome!");
+            runTransaction(visitsRef, (currentValue) => (currentValue || 0) + 1);
         }
-
-        // Use localStorage for one-time count per user (persistent)
         if (!localStorage.getItem('visitCounted')) {
             incrementVisitCount();
             localStorage.setItem('visitCounted', 'true');
         }
+
+        const presenceRef = ref(database, 'presence');
+        const connectedRef = ref(database, '.info/connected');
+
+        onValue(connectedRef, (snap) => {
+          if (snap.val() === true) {
+            const myConnectionRef = push(presenceRef);
+            onDisconnect(myConnectionRef).remove();
+            set(myConnectionRef, true);
+          }
+        });
     </script>
     </body>
 </html>
